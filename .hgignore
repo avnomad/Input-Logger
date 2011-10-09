@@ -1,0 +1,6 @@
+syntax: regexp
+Debug/*
+ipch/*
+syntax: glob
+Input Logger.opensdf
+Input Logger.sdf
