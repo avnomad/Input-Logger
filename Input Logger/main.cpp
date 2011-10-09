@@ -7,33 +7,38 @@ using std::endl;
 using std::left;
 using std::right;
 
-#include <windows.h>
-
 #include <gl/glew.h>
-//#include <gl/glut.h>
+
+#include "window procedure.h"
+#include "process input.h"
+#include "render frame.h"
 
 int main()
 {
+	WNDCLASSEXW wc = {sizeof(WNDCLASSEXW),0};
+	HWND window;
+	MSG message;
 	HDC gdiContext;
 	HGLRC glContext;
 	PIXELFORMATDESCRIPTOR pixelFormatDescription = {0};
 	int pixelFormatIndex;
-	int width;
-	int height;
-	
-	// CreateDC
-	//if(gdiContext = CreateDCW(L"DISPLAY",nullptr,nullptr,nullptr))	// covers all monitors?
-	//	wclog << L"Screen device context opened succesfully.\n";
-	//else
-	//	wcerr << L"Could not open device context for the screen.\n";
-	
-	if(gdiContext = GetDC(GetDesktopWindow()))	// covers all monitors?
-		wclog << L"Desktop device context opened succesfully.\n";
-	else
-		wcerr << L"Could not open device context for the desktop.\n";
 
-	width = GetDeviceCaps(gdiContext,HORZRES);
-	height = GetDeviceCaps(gdiContext,VERTRES);
+	// register a window class
+	wc.style = CS_OWNDC;
+	wc.lpfnWndProc = windowProcedure;
+	wc.hInstance = GetModuleHandleW(nullptr);
+	wc.lpszClassName = L"fullScreenWindow";
+	RegisterClassExW(&wc);
+
+	// create a window
+	window = CreateWindowExW(0,L"fullScreenWindow",L"WinTab input logger",WS_POPUP|WS_CLIPCHILDREN|WS_CLIPSIBLINGS|WS_VISIBLE,0,0,	// size of
+					GetSystemMetrics(SM_CXSCREEN),GetSystemMetrics(SM_CYSCREEN),nullptr,nullptr,GetModuleHandleW(nullptr),nullptr);	// primary display
+
+	// hide cursor
+	ShowCursor(FALSE);
+
+	// get device context handle
+	gdiContext = GetDC(window);
 
 	// create OpenGL rendering context
 	pixelFormatDescription.nSize = sizeof(PIXELFORMATDESCRIPTOR);
@@ -71,28 +76,29 @@ int main()
 	// initialize OpenGL
 	glClearColor(1.0,0.5,0.0,0.0);
 
-	//while(true)
-	//{
-	//	glClear(GL_COLOR_BUFFER_BIT);
-	//	SwapBuffers(gdiContext);
-	//} // end while
-	wglMakeCurrent(nullptr,nullptr);
+	// main loop
+	while(GetMessageW(&message,nullptr,0,0))
+	{
+		RECT r;
+		TranslateMessage(&message);
+		DispatchMessageW(&message);
 
+		processInput();
+		GetClientRect(window,&r);
+		renderFrame(r.right,r.bottom);
+
+		SwapBuffers(gdiContext);
+	} // end while
+
+	// clean up
+	wglMakeCurrent(nullptr,nullptr);
 	if(wglDeleteContext(glContext))
 		wclog << L"OpenGL rendering context deleted succesfully.\n";
 	else
 		wcerr << L"Could not delete OpenGL rendering context .\n";
+	DestroyWindow(window);
+	UnregisterClassW(L"fullScreenWindow",GetModuleHandleW(nullptr));	// not necessary
 
-	if(ReleaseDC(GetDesktopWindow(),gdiContext))	// fails if argument is nullptr
-		wclog << L"Desktop device context closed succesfully.\n";
-	else
-		wcerr << L"Could not close the device context for the desktop.\n";
-
-	// DeleteDC
-	//if(DeleteDC(gdiContext))	// fails if argument is nullptr
-	//	wclog << L"Screen device context closed succesfully.\n";
-	//else
-	//	wcerr << L"Could not close the device context for the screen.\n";
-	system("pause"); 
+	//system("pause"); 
 	return 0; 
 } // end function main

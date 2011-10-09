@@ -61,6 +61,14 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="process input.cpp" />
+    <ClCompile Include="render frame.cpp" />
+    <ClCompile Include="window procedure.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="process input.h" />
+    <ClInclude Include="render frame.h" />
+    <ClInclude Include="window procedure.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
