@@ -91,42 +91,42 @@ struct Packet
 }; // end struct Packet
 
 #define NP_MASK 0x01
-bool pressed = false;
 
 void processInput(void)
 {
-	for_each(begin(wtDevices),end(wtDevices),[](const Device &device)
+	vector<Packet> packets;
+	for_each(begin(wtDevices),end(wtDevices),[&packets](const Device &device)
 	{
-		vector<Packet> packets(device.queueSize);
-		packets.resize(WTPacketsGet(device.wtContext,packets.size(),packets.data()));
+		packets.resize(device.queueSize);
+		int size = WTPacketsGet(device.wtContext,packets.size(),packets.data());
+		packets.resize(size);
 		for_each(begin(packets),end(packets),[&device](const Packet &packet)
 		{
 			if(packet.np > 10)
 			{
 				Point p;
-				pressed = true;
 				p.position.x = double(packet.x - device.x.axMin)/(device.x.axMax-device.x.axMin);
 				p.position.y = double(packet.y - device.y.axMin)/(device.y.axMax-device.y.axMin);
 				p.pressure = double(packet.np - device.np.axMin)/(device.np.axMax-device.np.axMin);
 				currentStrokes[packet.cursor].push_back(p);
 			} // end if
-			if(pressed && packet.np <= 10)
+			if(packet.np <= 10 && currentStrokes.count(packet.cursor))
 			{
 				completeStrokes.push_back(*currentStrokes.find(packet.cursor));
 				currentStrokes.erase(packet.cursor);
-				pressed = false;
 			} // end if
 		}); // end for_each
 	}); // end for_each
 } // end function processInput
 
 
-void cleanUpInput()
-{
+void cleanUpInput()	// bad design! WTClose should be called before window is destroyed. wtUnLoad
+{					// should be called only once
 	for_each(begin(wtDevices),end(wtDevices),[](const Device &device)
 	{
 		WTClose(device.wtContext);
 	}); // end for_each
+	wtDevices.clear();
 
 	wtUnLoad();
 } // end function cleanUpInput

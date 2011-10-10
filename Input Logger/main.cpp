@@ -10,7 +10,7 @@ using std::right;
 #include <gl/glew.h>
 
 #include "window procedure.h"
-//#include "process input.h"
+#include "process input.h"
 #include "render frame.h"
 
 int main()
@@ -31,7 +31,7 @@ int main()
 	RegisterClassExW(&wc);
 
 	// create a window
-	window = CreateWindowExW(0,L"fullScreenWindow",L"WinTab input logger",WS_OVERLAPPEDWINDOW|WS_CLIPCHILDREN|WS_CLIPSIBLINGS|WS_VISIBLE,0,0,	// size of
+	window = CreateWindowExW(0,L"fullScreenWindow",L"WinTab input logger",WS_POPUP|WS_CLIPCHILDREN|WS_CLIPSIBLINGS|WS_VISIBLE,0,0,	// size of
 					GetSystemMetrics(SM_CXSCREEN),GetSystemMetrics(SM_CYSCREEN),nullptr,nullptr,GetModuleHandleW(nullptr),nullptr);	// primary display
 
 	// get device context handle
@@ -49,7 +49,7 @@ int main()
 	pixelFormatDescription.cStencilBits = 32;
 	pixelFormatDescription.cAuxBuffers = 128;
 	pixelFormatDescription.iLayerType = PFD_MAIN_PLANE;
-
+	
 	if(pixelFormatIndex = ChoosePixelFormat(gdiContext,&pixelFormatDescription))
 		wclog << L"Pixel format selected succesfully.\n";
 	else
@@ -72,16 +72,16 @@ int main()
 
 	// misc
 	//ShowCursor(FALSE);
-	//initializeInput(window);
 
 	// initialize OpenGL
-	glClearColor(1.0,0.5,0.0,0.0);
+	glClearColor(0.0,0.0,0.0,0.0);
 	glMatrixMode(GL_PROJECTION);
 	glOrtho(0,1,0,1,0,1);
 	glMatrixMode(GL_MODELVIEW);
 	glEnable(GL_BLEND);
-	glBlendFunc(GL_BLEND_SRC_ALPHA,GL_ONE_MINUS_SRC_ALPHA);
+	glBlendFunc(GL_SRC_ALPHA,GL_ONE_MINUS_SRC_ALPHA);
 	glEnable(GL_LINE_SMOOTH);
+	glHint(GL_LINE_SMOOTH_HINT,GL_NICEST);
 
 	// main loop
 	do
@@ -94,7 +94,7 @@ int main()
 		} // end while
 
 		RECT r;
-		//processInput();
+		processInput();
 		GetClientRect(window,&r);
 		renderFrame(r.right,r.bottom);
 
@@ -103,7 +103,6 @@ int main()
 	while(message.message != WM_QUIT);
 
 	// clean up
-	//cleanUpInput();
 	wglMakeCurrent(nullptr,nullptr);
 	if(wglDeleteContext(glContext))
 		wclog << L"OpenGL rendering context deleted succesfully.\n";

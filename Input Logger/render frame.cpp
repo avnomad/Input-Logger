@@ -13,18 +13,18 @@ using std::end;
 #define length(A) (sizeof(A)/sizeof((A)[0]))
 
 float colors[][3] = {
-	{1,0,0},		// red
 	{0,1,0},		// lime
-	{0,0,1},		// blue
+	{0,0.5,0},		// green
+	{1,0.75,0},		// gold
 	{1,1,0},		// yellow
+	{1,0,0},		// red
 	{1,0.5,0},		// orange
+	{0,0.25,1},		// azure
 	{0,1,1},		// cyan
 	{1,0,1},		// purple
-	{1,0.75,0},		// gold
 	{1,1,1},		// white
-	{0,0.25,1},		// azure
+	{0,0,1},		// blue
 	{0.5,0.25,0},	// brown
-	{0,0.5,0}		// green
 };
 
 
@@ -57,11 +57,4 @@ void renderFrame(int width,int height)
 		glEnd();
 	}); // end for_each
 
-	glColor3f(1,1,0);
-	glBegin(GL_LINES);
-		glVertex2d(0.0,1.0);
-		glVertex2d(1.0,0.0);
-		glVertex2d(0.0,0.0);
-		glVertex2d(1.0,1.0);
-	glEnd();
 } // end function renderFrame
