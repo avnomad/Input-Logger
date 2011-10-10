@@ -3,7 +3,7 @@
 
 #include "process input.h"
 #include "shared.h"
-#define BASE 10004
+#define BASE 9998
 
 LRESULT CALLBACK windowProcedure(HWND window,UINT message,WPARAM argW,LPARAM argL)
 {

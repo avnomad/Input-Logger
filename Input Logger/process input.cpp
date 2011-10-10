@@ -102,18 +102,20 @@ void processInput(void)
 		packets.resize(size);
 		for_each(begin(packets),end(packets),[&device](const Packet &packet)
 		{
+			DWORD type;
+			WTInfoW(WTI_CURSORS+packet.cursor,CSR_TYPE,&type);
 			if(packet.np > 10)
 			{
 				Point p;
 				p.position.x = double(packet.x - device.x.axMin)/(device.x.axMax-device.x.axMin);
 				p.position.y = double(packet.y - device.y.axMin)/(device.y.axMax-device.y.axMin);
 				p.pressure = double(packet.np - device.np.axMin)/(device.np.axMax-device.np.axMin);
-				currentStrokes[packet.cursor].push_back(p);
+				currentStrokes[(packet.cursor+type)].push_back(p);
 			} // end if
-			if(packet.np <= 10 && currentStrokes.count(packet.cursor))
+			if(packet.np <= 10 && currentStrokes.count((packet.cursor+type)))
 			{
-				completeStrokes.push_back(*currentStrokes.find(packet.cursor));
-				currentStrokes.erase(packet.cursor);
+				completeStrokes.push_back(*currentStrokes.find((packet.cursor+type)));
+				currentStrokes.erase((packet.cursor+type));
 			} // end if
 		}); // end for_each
 	}); // end for_each
