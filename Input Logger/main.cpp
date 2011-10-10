@@ -10,7 +10,7 @@ using std::right;
 #include <gl/glew.h>
 
 #include "window procedure.h"
-#include "process input.h"
+//#include "process input.h"
 #include "render frame.h"
 
 int main()
@@ -32,7 +32,7 @@ int main()
 
 	// create a window
 	window = CreateWindowExW(0,L"fullScreenWindow",L"WinTab input logger",WS_POPUP|WS_CLIPCHILDREN|WS_CLIPSIBLINGS|WS_VISIBLE,0,0,	// size of
-					GetSystemMetrics(SM_CXSCREEN),GetSystemMetrics(SM_CYSCREEN),nullptr,nullptr,GetModuleHandleW(nullptr),nullptr);	// primary display
+					GetSystemMetrics(SM_CXSCREEN)/2,GetSystemMetrics(SM_CYSCREEN)/2,nullptr,nullptr,GetModuleHandleW(nullptr),nullptr);	// primary display
 
 	// get device context handle
 	gdiContext = GetDC(window);
@@ -72,32 +72,38 @@ int main()
 
 	// misc
 	ShowCursor(FALSE);
-	initializeInput();
+	//initializeInput(window);
 
 	// initialize OpenGL
-	glClearColor(0.0,0.0,0.0,0.0);
+	glClearColor(1.0,0.5,0.0,0.0);
 	glMatrixMode(GL_PROJECTION);
 	glOrtho(0,1,0,1,0,1);
 	glMatrixMode(GL_MODELVIEW);
 	glEnable(GL_BLEND);
+	glBlendFunc(GL_BLEND_SRC_ALPHA,GL_ONE_MINUS_SRC_ALPHA);
 	glEnable(GL_LINE_SMOOTH);
 
 	// main loop
-	while(GetMessageW(&message,nullptr,0,0))
+	do
 	{
-		RECT r;
-		TranslateMessage(&message);
-		DispatchMessageW(&message);
+		while(PeekMessageW(&message,nullptr,0,0,PM_REMOVE))
+		{
+			if(message.message == WM_QUIT) break;
+			TranslateMessage(&message);
+			DispatchMessageW(&message);
+		} // end while
 
-		processInput();
+		RECT r;
+		//processInput();
 		GetClientRect(window,&r);
 		renderFrame(r.right,r.bottom);
 
 		SwapBuffers(gdiContext);
 	} // end while
+	while(message.message != WM_QUIT);
 
 	// clean up
-	cleanUpInput();
+	//cleanUpInput();
 	wglMakeCurrent(nullptr,nullptr);
 	if(wglDeleteContext(glContext))
 		wclog << L"OpenGL rendering context deleted succesfully.\n";
