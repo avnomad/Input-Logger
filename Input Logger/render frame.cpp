@@ -27,21 +27,11 @@ float colors[][3] = {
 	{0,0.5,0}		// green
 };
 
-double x = 0;
-double y = 0;
 
 void renderFrame(int width,int height)
 {
 	glViewport(0,0,width,height);
 	glClear(GL_COLOR_BUFFER_BIT);
-
-	Point p;
-	p.position.x = x += 0.01;
-	p.position.y = y += 0.005;
-	p.pressure = 0.5;
-	currentStrokes[62000].push_back(p);
-
-
 
 	for_each(begin(currentStrokes),end(currentStrokes),[](const pair<unsigned int,vector<Point>> &pair)
 	{

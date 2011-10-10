@@ -31,8 +31,8 @@ int main()
 	RegisterClassExW(&wc);
 
 	// create a window
-	window = CreateWindowExW(0,L"fullScreenWindow",L"WinTab input logger",WS_POPUP|WS_CLIPCHILDREN|WS_CLIPSIBLINGS|WS_VISIBLE,0,0,	// size of
-					GetSystemMetrics(SM_CXSCREEN)/2,GetSystemMetrics(SM_CYSCREEN)/2,nullptr,nullptr,GetModuleHandleW(nullptr),nullptr);	// primary display
+	window = CreateWindowExW(0,L"fullScreenWindow",L"WinTab input logger",WS_OVERLAPPEDWINDOW|WS_CLIPCHILDREN|WS_CLIPSIBLINGS|WS_VISIBLE,0,0,	// size of
+					GetSystemMetrics(SM_CXSCREEN),GetSystemMetrics(SM_CYSCREEN),nullptr,nullptr,GetModuleHandleW(nullptr),nullptr);	// primary display
 
 	// get device context handle
 	gdiContext = GetDC(window);
@@ -71,7 +71,7 @@ int main()
 	glewInit();
 
 	// misc
-	ShowCursor(FALSE);
+	//ShowCursor(FALSE);
 	//initializeInput(window);
 
 	// initialize OpenGL
@@ -109,7 +109,6 @@ int main()
 		wclog << L"OpenGL rendering context deleted succesfully.\n";
 	else
 		wcerr << L"Could not delete OpenGL rendering context .\n";
-	DestroyWindow(window);
 	UnregisterClassW(L"fullScreenWindow",GetModuleHandleW(nullptr));	// not necessary
 
 	//system("pause"); 
