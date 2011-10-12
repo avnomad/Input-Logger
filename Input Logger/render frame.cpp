@@ -48,7 +48,7 @@ void renderFrame(int width,int height)
 	for_each(begin(completeStrokes),end(completeStrokes),[](const pair<unsigned int,vector<Point>> &pair)
 	{
 		float *color = colors[pair.first % length(colors)];
-		glBegin(GL_POINTS);
+		glBegin(GL_LINE_STRIP);
 			for_each(begin(pair.second),end(pair.second),[color](const Point &point)
 			{
 				glColor4f(color[0],color[1],color[2],point.pressure);

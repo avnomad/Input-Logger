@@ -54,13 +54,14 @@ void initializeInput(HWND window)
 		wtLogContext.lcBtnDnMask = wtLogContext.lcBtnUpMask = ~0;
 		WTInfoW(WTI_DEVICES+c,DVC_X,&wtDevices[c].x);
 		wtLogContext.lcInOrgX = wtLogContext.lcOutOrgX = wtDevices[c].x.axMin;
-		wtLogContext.lcInExtX = wtLogContext.lcOutExtX = wtDevices[c].x.axMax-wtDevices[c].x.axMin;
+		wtLogContext.lcInExtX = wtLogContext.lcOutExtX = wtDevices[c].x.axMax-wtDevices[c].x.axMin+1;
 		WTInfoW(WTI_DEVICES+c,DVC_Y,&wtDevices[c].y);
 		wtLogContext.lcInOrgY = wtLogContext.lcOutOrgY = wtDevices[c].y.axMin;
-		wtLogContext.lcInExtY = wtLogContext.lcOutExtY = wtDevices[c].y.axMax-wtDevices[c].y.axMin;
+		wtLogContext.lcInExtY = wtLogContext.lcOutExtY = wtDevices[c].y.axMax-wtDevices[c].y.axMin+1;
 		WTInfoW(WTI_DEVICES+c,DVC_NPRESSURE,&wtDevices[c].np);
 		if((wtDevices[c].wtContext = WTOpenW(window,&wtLogContext,FALSE)) == nullptr)
 			throw runtime_error("Could not open desired context(s).");
+		WTGetW(wtDevices[c].wtContext,&wtLogContext);	// to see what field were changed by WTOpen during debugging.
 
 		// configure context queue size
 		wtDevices[c].queueSize = WTQueueSizeGet(wtDevices[c].wtContext);
