@@ -31,8 +31,9 @@ int main()
 	RegisterClassExW(&wc);
 
 	// create a window
-	window = CreateWindowExW(0,L"fullScreenWindow",L"WinTab input logger",WS_POPUP|WS_CLIPCHILDREN|WS_CLIPSIBLINGS|WS_VISIBLE,0,0,	// size of
+	window = CreateWindowExW(0,L"fullScreenWindow",L"WinTab input logger",WS_POPUP|WS_CLIPCHILDREN|WS_CLIPSIBLINGS,0,0,	// size of
 					GetSystemMetrics(SM_CXSCREEN),GetSystemMetrics(SM_CYSCREEN),nullptr,nullptr,GetModuleHandleW(nullptr),nullptr);	// primary display
+	ShowWindow(window,SW_SHOWNORMAL);
 
 	// get device context handle
 	gdiContext = GetDC(window);
@@ -71,7 +72,7 @@ int main()
 	glewInit();
 
 	// misc
-	//ShowCursor(FALSE);
+	ShowCursor(FALSE);
 
 	// initialize OpenGL
 	glClearColor(0.0,0.0,0.0,0.0);

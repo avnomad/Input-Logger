@@ -25,7 +25,7 @@ LRESULT CALLBACK windowProcedure(HWND window,UINT message,WPARAM argW,LPARAM arg
 
 			p.position.x = GET_X_LPARAM(argL)/(double)GetSystemMetrics(SM_CXSCREEN);
 			p.position.y = (GetSystemMetrics(SM_CYSCREEN)-GET_Y_LPARAM(argL))/(double)GetSystemMetrics(SM_CYSCREEN);
-			p.pressure = 1.0;
+			p.pressure = 0.75;
 			currentStrokes[index].push_back(p);
 		} // end if
 		return 0;
@@ -34,7 +34,7 @@ LRESULT CALLBACK windowProcedure(HWND window,UINT message,WPARAM argW,LPARAM arg
 		{
 			p.position.x = GET_X_LPARAM(argL)/(double)GetSystemMetrics(SM_CXSCREEN);
 			p.position.y = (GetSystemMetrics(SM_CYSCREEN)-GET_Y_LPARAM(argL))/(double)GetSystemMetrics(SM_CYSCREEN);
-			p.pressure = 1.0;
+			p.pressure = 0.75;
 			currentStrokes[index].push_back(p);
 		} // end if
 		return 0;
