@@ -1,6 +1,8 @@
 syntax: regexp
 Debug/*
 ipch/*
+Release/*
 syntax: glob
 Input Logger.opensdf
 Input Logger.sdf
+Input Logger.suo

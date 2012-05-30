@@ -39,17 +39,17 @@ int main()
 	gdiContext = GetDC(window);
 
 	// create OpenGL rendering context
-	pixelFormatDescription.nSize = sizeof(PIXELFORMATDESCRIPTOR);
-	pixelFormatDescription.nVersion = 1;
-	pixelFormatDescription.dwFlags = PFD_DRAW_TO_WINDOW|PFD_SUPPORT_OPENGL|PFD_DOUBLEBUFFER|PFD_STEREO_DONTCARE;
-	pixelFormatDescription.iPixelType = PFD_TYPE_RGBA;
-	pixelFormatDescription.cColorBits = 64;
-	pixelFormatDescription.cAlphaBits = 16;
-	pixelFormatDescription.cAccumBits = 128;
-	pixelFormatDescription.cDepthBits = 64;
+	pixelFormatDescription.nSize        = sizeof(PIXELFORMATDESCRIPTOR);
+	pixelFormatDescription.nVersion     = 1;
+	pixelFormatDescription.dwFlags      = PFD_DRAW_TO_WINDOW|PFD_SUPPORT_OPENGL|PFD_DOUBLEBUFFER|PFD_STEREO_DONTCARE;
+	pixelFormatDescription.iPixelType   = PFD_TYPE_RGBA;
+	pixelFormatDescription.cColorBits   = 64;
+	pixelFormatDescription.cAlphaBits   = 16;
+	pixelFormatDescription.cAccumBits   = 128;
+	pixelFormatDescription.cDepthBits   = 64;
 	pixelFormatDescription.cStencilBits = 32;
-	pixelFormatDescription.cAuxBuffers = 128;
-	pixelFormatDescription.iLayerType = PFD_MAIN_PLANE;
+	pixelFormatDescription.cAuxBuffers  = 128;
+	pixelFormatDescription.iLayerType   = PFD_MAIN_PLANE;
 	
 	if(pixelFormatIndex = ChoosePixelFormat(gdiContext,&pixelFormatDescription))
 		wclog << L"Pixel format selected succesfully.\n";
