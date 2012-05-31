@@ -119,6 +119,15 @@ void processInput(void)
 		packets.resize(size);
 		for_each(begin(packets),end(packets),[&device](const Packet &packet)
 		{
+			// normally when we ask for the packets of a context we should get 
+			// the packets of that context, but this doesn't seem to be the case 
+			// with Wacom's Cintiq Wintab 64-bit implementation...
+			// so has to work around this bug.
+			if(device.wtContext != packet.context)	// if packet is not from out context...
+			{
+				fout << "\"wrong context!\",\n";
+				return;	// ...ignore the packet
+			} // end if
 			fout << packet << L",\n";	// log packet
 
 			DWORD type;
