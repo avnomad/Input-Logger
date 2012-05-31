@@ -112,12 +112,14 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="packet.cpp" />
     <ClCompile Include="process input.cpp" />
     <ClCompile Include="render frame.cpp" />
     <ClCompile Include="shared.cpp" />
     <ClCompile Include="window procedure.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="packet.h" />
     <ClInclude Include="process input.h" />
     <ClInclude Include="render frame.h" />
     <ClInclude Include="shared.h" />

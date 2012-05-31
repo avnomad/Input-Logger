@@ -30,7 +30,11 @@ using std::for_each;
 using std::begin;
 using std::end;
 
+#include <fstream>
+using std::wofstream;
+
 #include "shared.h"
+#include "packet.h"
 
 struct Device
 {
@@ -42,6 +46,7 @@ struct Device
 }; // end struct Device
 
 static vector<Device> wtDevices;
+static wofstream fout;
 
 void initializeInput(HWND window)
 {
@@ -49,6 +54,14 @@ void initializeInput(HWND window)
 	UINT nDevices;
 	WORD wintabVersion;
 
+	// start logging
+	fout.open(L"log.txt");
+	if(!fout)
+		throw runtime_error("Could not open file log.txt for writing!");
+
+	fout << L"{\"wintab input packets\":[\n";
+
+	// initialize wintab
 	wtLoad();
 	if(!WTInfoW(0,0,nullptr))
 		throw runtime_error("No information available from WTInfoW.");
@@ -66,7 +79,7 @@ void initializeInput(HWND window)
 		wtLogContext.lcLocks = CXL_INSIZE|CXL_MARGIN|CXL_SENSITIVITY|CXL_SYSOUT;
 		wtLogContext.lcDevice = c;
 		wtLogContext.lcPktRate = 200;
-		wtLogContext.lcPktData = PK_CONTEXT|PK_STATUS|PK_TIME|PK_CHANGED|PK_SERIAL_NUMBER|PK_CURSOR|PK_BUTTONS|PK_X|PK_Y|PK_NORMAL_PRESSURE;
+		wtLogContext.lcPktData = packetContentFlags;
 		wtLogContext.lcPktMode = 0;
 		wtLogContext.lcMoveMask = ~0;
 		wtLogContext.lcBtnDnMask = wtLogContext.lcBtnUpMask = ~0;
@@ -95,21 +108,6 @@ void initializeInput(HWND window)
 	} // end for
 } // end function initializeInput
 
-struct Packet
-{
-	HCTX context;
-	UINT status;
-	LONG time;
-	WTPKT changed;
-	UINT serialNumber;
-	UINT cursor;
-	DWORD buttons;
-	DWORD x;
-	DWORD y;
-	UINT np;
-}; // end struct Packet
-
-#define NP_MASK 0x01
 
 void processInput(void)
 {
@@ -121,6 +119,8 @@ void processInput(void)
 		packets.resize(size);
 		for_each(begin(packets),end(packets),[&device](const Packet &packet)
 		{
+			fout << packet << L",\n";	// log packet
+
 			DWORD type;
 			WTInfoW(WTI_CURSORS+packet.cursor,CSR_TYPE,&type);
 			if(packet.np > 10)
@@ -150,6 +150,10 @@ void cleanUpInput()	// bad design! WTClose should be called before window is des
 	wtDevices.clear();
 
 	wtUnLoad();
+
+	// finish logging
+	fout << L"null]}";
+	fout.close();
 } // end function cleanUpInput
 
 

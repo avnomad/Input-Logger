@@ -6,3 +6,4 @@ syntax: glob
 Input Logger.opensdf
 Input Logger.sdf
 Input Logger.suo
+Input Logger/log.txt

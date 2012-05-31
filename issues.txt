@@ -1,6 +1,9 @@
 Issues:
 
--input logging functionality not implemented yet.
+-input logging functionality is still basic.
+-currently buts a spurious 'null' entry in the end of json log file to simplify 
+ code, but this should be eliminated.
 -strange behavior is exhibited when running under x64 and writing with pen 
- tip with no side buttons pressed.
+ tip with no side buttons pressed. This behavior is different for each pen and 
+ doesn't seem to appear with Bamboo (maybe some other strange things).
 -color assignment is not done in a predictable way.
