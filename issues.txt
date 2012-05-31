@@ -1,0 +1,6 @@
+Issues:
+
+-input logging functionality not implemented yet.
+-strange behavior is exhibited when running under x64 and writing with pen 
+ tip with no side buttons pressed.
+-color assignment is not done in a predictable way.
